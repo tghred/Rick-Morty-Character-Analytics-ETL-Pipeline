@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
 ![ETL](https://img.shields.io/badge/Process-ETL-orange)
+![API WEB INTERACTION]
 
 A professional ETL (Extract, Transform, Load) pipeline for collecting, processing, and analyzing character data from the Rick and Morty API. This system provides a robust foundation for data extraction and analysis with production-ready features.
 

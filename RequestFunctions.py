@@ -133,6 +133,12 @@ def save_csv(characters:List[Dict],filename:str = 'char.csv'):
         writer.writeheader()
         writer.writerows(characters)
 
+
+def save_to_json(characters: List[Dict], filename: str = 'characters.json'):
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(characters, f, ensure_ascii=False, indent=2)
+
 ###################################################################
 
 if __name__ == "__main__":

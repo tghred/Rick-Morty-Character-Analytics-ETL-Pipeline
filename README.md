@@ -1,7 +1,7 @@
 # Rick & Morty Character Analytics ETL Pipeline
 
 ![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+
 ![ETL](https://img.shields.io/badge/Process-ETL-orange)
 
 A professional ETL (Extract, Transform, Load) pipeline for collecting, processing, and analyzing character data from the Rick and Morty API. This system provides a robust foundation for data extraction and analysis with production-ready features.
@@ -188,9 +188,7 @@ We welcome contributions! Please feel free to submit pull requests, report bugs,
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 

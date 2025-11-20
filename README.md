@@ -1,25 +1,33 @@
+
+
 # Rick & Morty Character Analytics ETL Pipeline
 
 ![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supported-green)
+![License](https://img.shields.io/badge/License-MIT-green)
 ![ETL](https://img.shields.io/badge/Process-ETL-orange)
 
-
-A professional ETL (Extract, Transform, Load) pipeline for collecting, processing, and analyzing character data from the Rick and Morty API. This system provides a robust foundation for data extraction and analysis with production-ready features.
+A professional ETL (Extract, Transform, Load) pipeline for collecting, processing, and analyzing character data from the Rick and Morty API. This system provides a robust foundation for data extraction and analysis with production-ready features including PostgreSQL integration.
 
 ## 🌟 Overview
 
-An integrated system for extracting and analyzing Rick and Morty character data using ETL technologies. The system represents an automated platform for collecting data from public APIs, processing it, and storing it in multiple formats to enable comprehensive analysis operations.
+An integrated system for extracting and analyzing Rick and Morty character data using ETL technologies. The system represents an automated platform for collecting data from public APIs, processing it, and storing it in multiple formats (JSON, CSV, PostgreSQL) to enable comprehensive analysis operations.
 
 ## 🚀 Features
 
 ### 🔄 Integrated ETL Process
 - **Extraction**: Secure and reliable data retrieval from Rick and Morty API
 - **Transformation**: Data cleaning, enrichment, and preparation for analysis
-- **Load**: Data storage in consumable JSON and CSV formats
+- **Load**: Data storage in multiple formats (JSON, CSV, PostgreSQL)
+
+### 🗄️ Database Integration
+- **PostgreSQL Support**: Full database integration with connection management
+- **Configurable Settings**: Secure database configuration using INI files
+- **Connection Pooling**: Robust connection handling with error recovery
 
 ### 🏗️ Scalable Architecture
 - Modular design allowing easy integration of new data sources
-- Multi-format storage support (JSON, CSV, with database expansion capability)
+- Multi-format storage support with database expansion capability
 - Comprehensive error handling ensuring operational continuity
 
 ### ⚡ Enhanced Performance
@@ -31,6 +39,7 @@ An integrated system for extracting and analyzing Rick and Morty character data 
 
 ### Prerequisites
 - Python 3.7+
+- PostgreSQL 12+
 - pip package manager
 
 ### Setup
@@ -40,47 +49,207 @@ git clone https://github.com/yourusername/rick-morty-etl.git
 cd rick-morty-etl
 
 # Install dependencies
-pip install requests
-
-# Optional: for enhanced user agent rotation
-pip install fake-useragent
+pip install -r requirements.txt
 ```
 
-## 🛠️ Usage
+### Database Setup
+1. Install PostgreSQL and create a database
+2. Update the `database.ini` file with your credentials:
+```ini
+[postgresql]
+host=localhost
+database=postgres
+user=postgres
+password=44tt44ttaaSS
+port=5432
+connect_timeout=10
+```
+
+## 🛠️ Project Structure
+
+```
+rick-morty-etl/
+├── src/
+│   ├── __init__.py
+│   ├── etl_pipeline.py          # Main ETL pipeline
+│   ├── database/
+│   │   ├── __init__.py
+│   │   ├── config.py            # Database configuration
+│   │   └── connection.py        # Database connection manager
+│   └── utils/
+│       ├── __init__.py
+│       ├── data_processor.py    # Data transformation functions
+│       └── file_exporter.py     # JSON/CSV export functions
+├── config/
+│   └── database.ini            # Database configuration
+├── tests/
+│   ├── test_etl.py
+│   └── test_database.py
+├── requirements.txt
+├── README.md
+└── examples/
+    ├── basic_usage.py
+    └── advanced_analysis.py
+```
+
+## 📋 Usage
 
 ### Basic Usage
 ```python
-from rick_morty_etl import get_all_characters, save_to_json, save_to_csv
+from src.etl_pipeline import main_etl_pipeline
 
-# Extract and transform all character data
+# Run complete ETL pipeline
+main_etl_pipeline()
+```
+
+### Advanced Usage with Custom Configuration
+```python
+from src.database.connection import db_connection
+from src.etl_pipeline import get_all_characters, save_to_postgresql
+
+# Custom ETL process
 characters = get_all_characters()
 
-# Load data into files
-save_to_json(characters, 'characters.json')
-save_to_csv(characters, 'characters.csv')
+# Save to PostgreSQL with custom settings
+with db_connection(section='production') as conn:
+    save_to_postgresql(characters, connection=conn)
 
-print(f"Successfully processed {len(characters)} characters")
+# Export to files
+from src.utils.file_exporter import save_to_json, save_to_csv
+save_to_json(characters, 'output/characters.json')
+save_to_csv(characters, 'output/characters.csv')
 ```
 
-### Advanced Usage
+### Database Operations
 ```python
-import rick_morty_etl as rme
+from src.database.connection import db_connection
+from src.database.config import test_connection
 
-# Custom extraction with specific pages
-data = rme.main_request(
-    base_url='https://rickandmortyapi.com/api/',
-    endpoint='character',
-    page=1
-)
+# Test database connection
+test_connection()
 
-# Advanced data transformation
-characters = rme.parse_characters_data(data)
-
-# Export with custom filenames
-rme.save_to_json(characters, 'my_analysis.json')
+# Execute custom queries
+with db_connection() as conn:
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT COUNT(*) FROM characters")
+        count = cursor.fetchone()[0]
+        print(f"Total characters: {count}")
 ```
 
-## 📊 Output Formats
+## 🗃️ Database Schema
+
+### Characters Table
+```sql
+CREATE TABLE characters (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    status VARCHAR(50),
+    species VARCHAR(100),
+    episode_count INTEGER,
+    location VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Useful Queries
+```sql
+-- Character statistics by status
+SELECT status, COUNT(*) as count 
+FROM characters 
+GROUP BY status 
+ORDER BY count DESC;
+
+-- Top characters by episode appearance
+SELECT name, episode_count 
+FROM characters 
+ORDER BY episode_count DESC 
+LIMIT 10;
+
+-- Species distribution
+SELECT species, COUNT(*) as count 
+FROM characters 
+GROUP BY species 
+ORDER BY count DESC;
+```
+
+## ⚙️ Configuration
+
+### Database Configuration
+Create `config/database.ini`:
+```ini
+[postgresql]
+host=localhost
+database=postgres
+user=postgres
+password=44tt44ttaaSS
+port=5432
+connect_timeout=10
+
+[production]
+host=production-db.example.com
+database=rick_morty_prod
+user=app_user
+password=prod_password
+port=5432
+```
+
+### Environment Variables (Optional)
+```bash
+export DB_HOST=localhost
+export DB_NAME=rick_morty_db
+export DB_USER=postgres
+export DB_PASSWORD=your_password
+```
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+# Run all tests
+python -m pytest tests/
+
+# Run specific test module
+python -m pytest tests/test_etl.py -v
+
+# Run with coverage
+python -m pytest --cov=src tests/
+```
+
+### Test Database Connection
+```python
+from src.database.connection import test_connection
+
+# Test connection to default database
+test_connection()
+
+# Test connection to specific section
+test_connection(section='production')
+```
+
+## 🐛 Error Handling
+
+The system includes comprehensive error handling for:
+- Network connectivity issues
+- API rate limiting
+- Database connection failures
+- Data parsing errors
+- File I/O operations
+
+### Example Error Recovery
+```python
+try:
+    with db_connection() as conn:
+        # Database operations
+        pass
+except psycopg2.OperationalError as e:
+    print(f"Database connection failed: {e}")
+    # Implement retry logic or fallback
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```
+
+## 📊 Output Examples
 
 ### JSON Output
 ```json
@@ -103,84 +272,29 @@ id,name,status,species,episode_count,location
 2,Morty Smith,Alive,Human,39,Earth
 ```
 
-## 🏆 Value Proposition
+## 🔧 Development
 
-### For Developers
-- Practical model for ETL applications using Python
-- Real-world example of working with external APIs
-- Strong foundation for data analysis applications
+### Adding New Data Sources
+1. Create new extractor in `src/extractors/`
+2. Implement transformation logic in `src/utils/data_processor.py`
+3. Update database schema if needed
+4. Add tests in `tests/`
 
-### For End Users
-- Comprehensive Rick and Morty character database
-- Automatic statistics on character appearances
-- Flexible data export for use in analysis tools
+### Code Style
+```bash
+# Format code
+black src/ tests/
 
-### For Projects
-- Reusable structure for similar data projects
-- Complete documentation and professional coding standards
-- Foundation for AI applications and data analysis
+# Check code style
+flake8 src/ tests/
 
-## 🔬 Potential Applications
-
-- Character development analysis across episodes
-- Statistical studies on character distribution
-- Recommendation systems feeding
-- Gaming and quiz applications
-- Academic research in content analysis
-- Data science and machine learning projects
-
-## 🏗️ Project Structure
-
+# Type checking
+mypy src/
 ```
-rick-morty-etl/
-├── rick_morty_etl.py    # Main ETL pipeline
-├── requirements.txt     # Dependencies
-├── README.md           # Project documentation
-├── examples/           # Usage examples
-│   ├── basic_usage.py
-│   └── advanced_analysis.py
-└── outputs/            # Generated data files
-    ├── characters.json
-    └── characters.csv
-```
-
-## 🛡️ Error Handling
-
-The system includes comprehensive error handling:
-- Network request failures
-- API rate limiting
-- Data parsing errors
-- File I/O operations
-- Invalid data formats
-
-## 🔧 Configuration
-
-### Environment Variables
-```python
-# Optional: Set custom API endpoints
-BASE_URL = os.getenv('RICK_MORTY_API', 'https://rickandmortyapi.com/api/')
-REQUEST_TIMEOUT = int(os.getenv('REQUEST_TIMEOUT', '10'))
-```
-
-### Custom Headers
-```python
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-    'Accept': 'application/json',
-    'Accept-Language': 'en-US,en;q=0.9'
-}
-```
-
-## 📈 Performance
-
-- Processes 20+ characters per second
-- Automatic pagination handling
-- Memory-efficient data processing
-- Configurable request delays to respect API limits
 
 ## 🤝 Contributing
 
-We welcome contributions! Please feel free to submit pull requests, report bugs, or suggest new features.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -188,28 +302,36 @@ We welcome contributions! Please feel free to submit pull requests, report bugs,
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## 📄 License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
 - [Rick and Morty API](https://rickandmortyapi.com/) for providing the data
-- Python community for excellent data processing libraries
-- Contributors and testers
+- PostgreSQL community for excellent database support
+- Python community for robust data processing libraries
 
 ## 📞 Support
 
-If you have any questions or need help with setup:
-- Open an issue on GitHub
-- Check the examples directory
-- Review the code documentation
+If you have any questions or need help:
+
+- Open an [issue](https://github.com/yourusername/rick-morty-etl/issues)
+- Check the [examples](examples/) directory
+- Review the [documentation](docs/)
+
+## 🔮 Future Enhanceances
+
+- [ ] Real-time data streaming
+- [ ] Docker containerization
+- [ ] REST API for data access
+- [ ] Dashboard for visualization
+- [ ] Machine learning integration
 
 ---
 
-**The code represents a professional model for data management systems, combining simplicity of use with performance power, making it an ideal starting point for more complex data projects.**
-
----
 <div align="center">
 
-**⭐ Don't forget to star this repository if you find it helpful! ⭐**
+**⭐ If you find this project useful, please give it a star! ⭐**
 
 </div>

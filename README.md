@@ -181,12 +181,6 @@ password=44tt44ttaaSS
 port=5432
 connect_timeout=10
 
-[production]
-host=production-db.example.com
-database=rick_morty_prod
-user=app_user
-password=prod_password
-port=5432
 ```
 
 ### Environment Variables (Optional)
@@ -199,17 +193,6 @@ export DB_PASSWORD=your_password
 
 ## 🧪 Testing
 
-### Run Tests
-```bash
-# Run all tests
-python -m pytest tests/
-
-# Run specific test module
-python -m pytest tests/test_etl.py -v
-
-# Run with coverage
-python -m pytest --cov=src tests/
-```
 
 ### Test Database Connection
 ```python
@@ -275,17 +258,7 @@ id,name,status,species,episode_count,location
 3. Update database schema if needed
 4. Add tests in `tests/`
 
-### Code Style
-```bash
-# Format code
-black src/ tests/
 
-# Check code style
-flake8 src/ tests/
-
-# Type checking
-mypy src/
-```
 
 ## 🤝 Contributing
 

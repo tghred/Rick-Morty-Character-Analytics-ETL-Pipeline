@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Configuration (Sensitive data)
+config/database.ini
+.env
+
+# Environments
+venv/
+.venv/
+
+# Data
+output/
+*.csv
+*.json

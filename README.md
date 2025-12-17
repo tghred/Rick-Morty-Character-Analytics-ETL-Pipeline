@@ -177,7 +177,7 @@ Create `config/database.ini`:
 host=localhost
 database=postgres
 user=postgres
-password=44tt44ttaaSS
+password=[your_password]
 port=5432
 connect_timeout=10
 

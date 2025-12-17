@@ -62,7 +62,7 @@ host=localhost
 database=postgres
 user=postgres
 password=[your_password]
-port=5432
+port=[your_port]
 connect_timeout=10
 ```
 
@@ -179,7 +179,7 @@ host=localhost
 database=postgres
 user=postgres
 password=[your_password]
-port=5432
+port=[your_port]
 connect_timeout=10
 
 ```
@@ -203,7 +203,7 @@ from src.database.connection import test_connection
 test_connection()
 
 # Test connection to specific section
-test_connection(section='production')
+test_connection(section='postgresql')
 ```
 
 ## 🐛 Error Handling

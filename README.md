@@ -2,8 +2,9 @@
 
 # Rick & Morty Character Analytics ETL Pipeline
 
+
 ![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supported-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![ETL](https://img.shields.io/badge/Process-ETL-orange)
 

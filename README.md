@@ -1,6 +1,3 @@
-عدل لي هذا الملف ليتناسب مع المشروع المتكامل 
-
-
 
 
 # Rick & Morty Character Analytics ETL Pipeline
@@ -85,14 +82,9 @@ rick-morty-etl/
 │       └── file_exporter.py     # JSON/CSV export functions
 ├── config/
 │   └── database.ini            # Database configuration
-├── tests/
-│   ├── test_etl.py
-│   └── test_database.py
 ├── requirements.txt
 ├── README.md
-└── examples/
-    ├── basic_usage.py
-    └── advanced_analysis.py
+
 ```
 
 ## 📋 Usage
